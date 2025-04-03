@@ -1,0 +1,12 @@
+cd /tmp
+wget http://sourceforge.net/projects/netcat/files/netcat/1.10/netcat-1.10.tar.gz
+tar -xvzf netcat-1.10.tar.gz
+
+-------
+
+cd netcat-1.10
+---
+
+make
+
+sudo cp nc /usr/bin/nc
