@@ -1,7 +1,7 @@
 import socket
 import threading
 
-HOST = '192.168.185.16'  # ضع هنا IP السيرفر
+HOST = input(" IP SERVER : ").strip()  # ضع هنا IP السيرفر
 PORT = 2021
 
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -15,6 +15,9 @@ def receive_messages():
             if not data:
                 break
             print(f"\n {data} ")  # طباعة الرسالة المستلمة
+
+            if "Rejected connection" in data : 
+                client_socket.close()
         except:
             print("Connection closed.")
             break

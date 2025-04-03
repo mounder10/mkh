@@ -4,6 +4,15 @@ import subprocess
 
 HOST = '0.0.0.0'  # استماع على جميع الواجهات
 PORT = 2021
+ALLOWED_IPS = set() # array of ips
+print("Enter allowed IPs (press Enter to finish):")
+while True:
+    ip = input("Allowed IP: ").strip()
+    if not ip:
+        break
+    ALLOWED_IPS.add(ip)
+
+print(f"Allowed IPs: {ALLOWED_IPS}")
 
 server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server_socket.bind((HOST, PORT))
@@ -70,5 +79,13 @@ def handle_client(client_socket, addr):
 # استقبال الاتصالات وإنشاء Thread لكل عميل جديد
 while True:
     client_socket, addr = server_socket.accept()
-    client_thread = threading.Thread(target=handle_client, args=(client_socket, addr))
-    client_thread.start()
+
+    # السماح فقط بالاتصالات من العناوين المحددة
+    if addr[0] in ALLOWED_IPS:
+        print(f"Accepted connection from {addr[0]}")
+        client_thread = threading.Thread(target=handle_client, args=(client_socket, addr))
+        client_thread.start()
+    else:
+        print(f"Rejected connection from {addr[0]}")
+        client_socket.send((f"\n Rejected connection not allowed ").encode() )
+        client_socket.close()
